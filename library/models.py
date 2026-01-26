@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.urls.base import get_ns_resolver
 
 
 class Reader(models.Model):
@@ -55,3 +54,36 @@ class Book(models.Model):
         verbose_name = "Книга"
         verbose_name_plural = "Книги"
         ordering = ["title"]
+
+
+class Loan(models.Model):
+    """Модель выдачи книги"""
+
+    STATUS_CHOICES = [
+        ("overdue", "Просрочена"),
+        ("active", "Активная"),
+        ("returned", "Возвращена"),
+    ]
+
+    reader = models.ForeignKey(
+        Reader, on_delete=models.CASCADE, verbose_name="Читатель"
+    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name="Книга")
+    loan_date = models.DateField(verbose_name="Дата выдачи книги")
+    due_date = models.DateField(verbose_name="Срок возврата книги")
+    return_date = models.DateField(
+        verbose_name="Дата возврата книги", null=True, blank=True
+    )
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default="active", verbose_name="Статус"
+    )
+
+    def __str__(self):
+        return (
+            f"{self.book.title} взято {self.reader.first_name} {self.reader.last_name}"
+        )
+
+    class Meta:
+        verbose_name = "Выдача"
+        verbose_name_plural = "Выдачи"
+        ordering = ["return_date"]
