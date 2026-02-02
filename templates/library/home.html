@@ -1,0 +1,104 @@
+{% extends 'library/base.html' %} {% block title %}Главная - Система управления
+библиотекой{% endblock %} {% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Система управления библиотекой</h1>
+        {% if user.is_authenticated %}
+        <p class="lead">
+            Добро пожаловать, {{ user.username }}! {% if user.is_staff
+            %}(Администратор){% else %}(Обычный пользователь){% endif %}
+        </p>
+        {% else %}
+        <p class="lead">
+            Добро пожаловать в систему управления библиотекой. Пожалуйста,
+            войдите или зарегистрируйтесь для доступа к системе.
+        </p>
+        {% endif %}
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Книги</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_books }}</h5>
+                <p class="card-text">Всего книг в библиотеке</p>
+                <a href="{% url 'book_list' %}" class="btn btn-light"
+                    >Просмотр книг</a
+                >
+            </div>
+        </div>
+    </div>
+    {% if user.is_staff %}
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">Читатели</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_readers }}</h5>
+                <p class="card-text">Всего зарегистрированных читателей</p>
+                <a href="{% url 'reader_list' %}" class="btn btn-light"
+                    >Просмотр читателей</a
+                >
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">Выдачи</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ active_loans }}</h5>
+                <p class="card-text">Активные выдачи книг</p>
+                {% if user.is_staff %}
+                <a href="{% url 'loan_active' %}" class="btn btn-light"
+                    >Просмотр всех активных выдач</a
+                >
+                {% else %}
+                <a href="{% url 'loan_active' %}" class="btn btn-light"
+                    >Просмотр моих активных выдач</a
+                >
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>Быстрые действия</h3>
+        <div class="btn-group" role="group">
+            {% if user.is_staff %}
+            <a href="{% url 'reader_add' %}" class="btn btn-primary"
+                >Добавить читателя</a
+            >
+            <a href="{% url 'book_add' %}" class="btn btn-success"
+                >Добавить книгу</a
+            >
+            {% endif %}
+            <a href="{% url 'loan_add' %}" class="btn btn-warning"
+                >Выдать книгу</a
+            >
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Доступ к системе библиотеки</h5>
+                <p class="card-text">
+                    Пожалуйста, войдите или зарегистрируйтесь для управления
+                    читателями, книгами и выдачами.
+                </p>
+                <a href="{% url 'login' %}" class="btn btn-primary">Вход</a>
+                <a href="{% url 'register' %}" class="btn btn-success"
+                    >Регистрация</a
+                >
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %} {% endblock %}

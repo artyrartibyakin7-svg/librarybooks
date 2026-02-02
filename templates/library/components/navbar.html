@@ -1,0 +1,96 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}"
+            >Управление библиотекой</a
+        >
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Главная</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'book_list' %}">Книги</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'loan_list' %}"
+                        >Мои выдачи</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'loan_active' %}"
+                        >Активные выдачи</a
+                    >
+                </li>
+                {% endif %} {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'reader_list' %}"
+                        >Читатели</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'loan_history' %}"
+                        >Все выдачи</a
+                    >
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a
+                        class="nav-link dropdown-toggle"
+                        href="#"
+                        id="navbarDropdown"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                    >
+                        {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="{% url 'user_profile' %}"
+                                >Профиль</a
+                            >
+                        </li>
+                        {% if user.is_staff %}
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="{% url 'admin:index' %}"
+                                >Панель администратора</a
+                            >
+                        </li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'logout' %}"
+                                >Выход</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Вход</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}"
+                        >Регистрация</a
+                    >
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
