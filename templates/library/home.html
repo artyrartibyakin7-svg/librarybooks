@@ -1,12 +1,13 @@
-{% extends 'library/base.html' %} {% block title %}Главная - Система управления
-библиотекой{% endblock %} {% block content %}
+{% extends 'library/base.html' %}
+{% block title %} Главная - Система управлениябиблиотекой {% endblock %}
+{% block content %}
 <div class="row">
     <div class="col-md-12">
         <h1>Система управления библиотекой</h1>
         {% if user.is_authenticated %}
         <p class="lead">
-            Добро пожаловать, {{ user.username }}! {% if user.is_staff
-            %}(Администратор){% else %}(Обычный пользователь){% endif %}
+            Добро пожаловать, {{ user.username }}! {% if user.is_staff%}
+            (Администратор) {% else %} (Обычный пользователь) {% endif %}
         </p>
         {% else %}
         <p class="lead">
@@ -101,4 +102,5 @@
         </div>
     </div>
 </div>
-{% endif %} {% endblock %}
+{% endif %}
+{% endblock %}

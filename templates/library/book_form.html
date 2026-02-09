@@ -1,0 +1,21 @@
+{% extends 'library/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{{ title }} - Система управления библиотекой{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1>{{ title }}</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">{{ title }}</button>
+                <a href="{% if book %}{% url 'book_detail' book.pk %}{% else %}{% url 'book_list' %}{% endif %}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

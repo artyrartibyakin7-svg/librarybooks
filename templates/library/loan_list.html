@@ -1,0 +1,53 @@
+{% extends 'library/base.html' %}
+
+{% block title %}{% if title %}{{ title }}{% else %}Выдачи{% endif %} - Система управления библиотекой{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>{% if title %}{{ title }}{% else %}Выдачи{% endif %}</h1>
+    <a href="{% url 'loan_add' %}" class="btn btn-primary">Выдать книгу</a>
+</div>
+
+{% if loans %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Книга</th>
+                    <th>Читатель</th>
+                    <th>Дата выдачи</th>
+                    <th>Срок возврата</th>
+                    <th>Дата возврата</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                    <tr>
+                        <td>{{ loan.book.title }}</td>
+                        <td>{{ loan.reader.first_name }} {{ loan.reader.last_name }}</td>
+                        <td>{{ loan.loan_date }}</td>
+                        <td>{{ loan.due_date }}</td>
+                        <td>{{ loan.return_date|default:"Не возвращена" }}</td>
+                        <td>
+                            <span class="badge bg-{% if loan.status == 'active' %}primary{% elif loan.status == 'returned' %}success{% else %}danger{% endif %}">
+                                {% if loan.status == 'active' %}Активный{% elif loan.status == 'returned' %}Возвращенный{% else %}Просроченный{% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            {% if loan.status == 'active' %}
+                                <a href="{% url 'loan_return' loan.pk %}" class="btn btn-sm btn-success">Вернуть</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <p>Выдачи не найдены.</p>
+    </div>
+{% endif %}
+{% endblock %}

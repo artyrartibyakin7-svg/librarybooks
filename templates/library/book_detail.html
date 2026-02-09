@@ -1,0 +1,82 @@
+{% extends 'library/base.html' %}
+
+{% block title %}{{ book.title }} - Система управления библиотекой{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>{{ book.title }}</h1>
+    {% if user.is_staff %}
+        <div>
+            <a href="{% url 'book_edit' book.pk %}" class="btn btn-warning">Редактировать</a>
+            <a href="{% url 'book_delete' book.pk %}" class="btn btn-danger">Удалить</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Информация о книге</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Название:</strong> {{ book.title }}</p>
+                <p><strong>Автор:</strong> {{ book.author }}</p>
+                <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                <p><strong>Дата публикации:</strong> {{ book.publication_date }}</p>
+                <p><strong>Жанр:</strong> {{ book.genre }}</p>
+                <p><strong>Всего копий:</strong> {{ book.total_copies }}</p>
+                <p><strong>Доступно копий:</strong> {{ book.available_copies }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>История выдачи</h5>
+            </div>
+            <div class="card-body">
+                {% if loans %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Читатель</th>
+                                    <th>Дата выдачи</th>
+                                    <th>Срок возврата</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for loan in loans %}
+                                    <tr>
+                                        <td>{{ loan.reader.first_name }} {{ loan.reader.last_name }}</td>
+                                        <td>{{ loan.loan_date }}</td>
+                                        <td>{{ loan.due_date }}</td>
+                                        <td>
+                                            <span class="badge bg-{% if loan.status == 'active' %}primary{% elif loan.status == 'returned' %}success{% else %}danger{% endif %}">
+                                                {% if loan.status == 'active' %}Активный{% elif loan.status == 'returned' %}Возвращенный{% else %}Просроченный{% endif %}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p>История выдачи не найдена.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{% url 'book_list' %}" class="btn btn-secondary">Назад к списку книг</a>
+    {% if book.available_copies > 0 %}
+        <a href="{% url 'loan_add' %}" class="btn btn-primary">Выдать эту книгу</a>
+    {% else %}
+        <button class="btn btn-secondary" disabled>Нет доступных копий</button>
+    {% endif %}
+</div>
+{% endblock %}

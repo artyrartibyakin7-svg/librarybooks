@@ -1,0 +1,53 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Книги - Система управления библиотекой{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Книги</h1>
+    {% if user.is_staff %}
+        <a href="{% url 'book_add' %}" class="btn btn-primary">Добавить книгу</a>
+    {% endif %}
+</div>
+
+{% if books %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Автор</th>
+                    <th>ISBN</th>
+                    <th>Жанр</th>
+                    <th>Всего копий</th>
+                    <th>Доступно копий</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.isbn }}</td>
+                        <td>{{ book.genre }}</td>
+                        <td>{{ book.total_copies }}</td>
+                        <td>{{ book.available_copies }}</td>
+                        <td>
+                            <a href="{% url 'book_detail' book.pk %}" class="btn btn-sm btn-info">Просмотр</a>
+                            {% if user.is_staff %}
+                                <a href="{% url 'book_edit' book.pk %}" class="btn btn-sm btn-warning">Редактировать</a>
+                                <a href="{% url 'book_delete' book.pk %}" class="btn btn-sm btn-danger">Удалить</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <p>Книги не найдены. <a href="{% url 'book_add' %}">Добавьте первую книгу</a>.</p>
+    </div>
+{% endif %}
+{% endblock %}

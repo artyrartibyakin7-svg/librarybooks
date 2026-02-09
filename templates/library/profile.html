@@ -1,0 +1,62 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Профиль - Система управления библиотекой{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1>Профиль пользователя</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Личная информация</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-control" id="username" value="{{ user.username }}" disabled>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">Имя</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ reader.first_name }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Фамилия</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ reader.last_name }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Электронная почта</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ reader.email }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Телефон</label>
+                        <input type="text" class="form-control" id="phone" name="phone" value="{{ reader.phone }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Адрес</label>
+                        <textarea class="form-control" id="address" name="address" rows="3">{{ reader.address }}</textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Обновить профиль</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5>Настройки учетной записи</h5>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'change_password' %}" class="btn btn-warning">Изменить пароль</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

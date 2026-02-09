@@ -1,0 +1,22 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Удалить книгу - Система управления библиотекой{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1>Удалить книгу</h1>
+        
+        <div class="alert alert-warning">
+            <p>Вы уверены, что хотите удалить книгу <strong>{{ book.title }}</strong> автора {{ book.author }}?</p>
+            <p>Это действие нельзя отменить.</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Да, удалить</button>
+            <a href="{% url 'book_detail' book.pk %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
